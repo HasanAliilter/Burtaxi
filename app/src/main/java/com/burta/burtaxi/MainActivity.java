@@ -13,12 +13,15 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private Toolbar toolbar;
     private Fragment tempFragment;
+
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
         drawer = findViewById(R.id.drawer);
         navigationView = findViewById(R.id.navigationView);
         toolbar = findViewById(R.id.toolbar);
+
+        auth= FirebaseAuth.getInstance();
 
         setSupportActionBar(toolbar);
 
@@ -52,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
             tempFragment = new FragmentUcuncu();
         }
         if (item.getItemId() == R.id.nav_logout) {
+            auth.signOut();
             startActivity(new Intent(MainActivity.this, GirisActivity.class));
             finish();
         }

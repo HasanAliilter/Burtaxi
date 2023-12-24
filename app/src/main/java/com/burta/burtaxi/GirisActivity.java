@@ -76,12 +76,12 @@ public class GirisActivity extends AppCompatActivity {
 
         FirebaseUser user = auth.getCurrentUser();
 
-        /*   if (user != null) {
+           if (user != null) {
             Intent intent = new Intent(GirisActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         }
-*/
+
         //click eventleri
         textView_Kaydol.setOnClickListener(new View.OnClickListener() {
             @Override
