@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "777807027297",
+    "project_id": "burtax-v1",
+    "storage_bucket": "burtax-v1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:777807027297:android:89c2eff20634021adf5e20",
+        "android_client_info": {
+          "package_name": "com.burta.Burtax"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA37uC-Z1r7ml8OzmPo4QqHA-hUzykhHGY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:777807027297:android:3bd3145fcd807e47df5e20",
+        "android_client_info": {
+          "package_name": "com.burta.burtaxi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA37uC-Z1r7ml8OzmPo4QqHA-hUzykhHGY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
