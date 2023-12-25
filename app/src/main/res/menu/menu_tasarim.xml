@@ -10,6 +10,10 @@
                 android:id="@+id/nav_ikinci"
                 android:icon="@drawable/ic_baseline_edit_24"
                 android:title="Şoför Yorumları"></item>
+            <item
+                android:id="@+id/nav_dorduncu"
+                android:icon="@drawable/baseline_card_travel_24"
+                android:title="Seyahatlerim"></item>
         </menu>
     </item>
 

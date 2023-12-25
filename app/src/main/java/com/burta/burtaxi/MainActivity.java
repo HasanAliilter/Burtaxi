@@ -56,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.nav_ucuncu) {
             tempFragment = new FragmentUcuncu();
         }
+        if (item.getItemId() == R.id.nav_dorduncu) {
+            tempFragment = new FragmentDorduncu();
+        }
         if (item.getItemId() == R.id.nav_logout) {
             auth.signOut();
             startActivity(new Intent(MainActivity.this, GirisActivity.class));
