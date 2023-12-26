@@ -18,11 +18,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class KaydolActivity extends AppCompatActivity {
@@ -43,31 +45,43 @@ public class KaydolActivity extends AppCompatActivity {
        String sifre_tekrar=editTextKaydol_SifreTekrar.getText().toString();
        String kullanici_id = uuid.toString();
 
-        if (kullanici_ad.length()==0 || sifre.length()==0 || Eposta.length()==0 || sifre.length()==0 ||sifre_tekrar.length()==0) {
+        if (Eposta.length() == 0 || sifre.length() == 0 || sifre_tekrar.length() == 0 || kullanici_id.length() == 0 || kullanici_ad.length() == 0 ) {
             Toast.makeText(this, "Please fill in all the required fields.", Toast.LENGTH_LONG).show();
-
-
         } else {
+            auth.createUserWithEmailAndPassword(Eposta,sifre)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Kullanıcı başarıyla oluşturuldu, auth UID'sini al
+                                String userId = Objects.requireNonNull(auth.getCurrentUser()).getUid();
 
-            kaydol user = new kaydol(kullanici_id,kullanici_ad, Eposta,sifre);
-            reference = database.getReference("Users");
-            reference.child(kullanici_id).setValue(user);
+                                kaydol user = new kaydol(userId,kullanici_ad,sifre,Eposta);
 
-            reference.child(kullanici_id).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    auth.createUserWithEmailAndPassword(Eposta,sifre);
-                    Toast.makeText(KaydolActivity.this, "User created successfully.", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(KaydolActivity.this, GirisActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(KaydolActivity.this, e.getLocalizedMessage().toString(), Toast.LENGTH_LONG).show();
-                }
-            });
+                                // Real-time database'e kullanıcıyı kaydet
+                                reference = database.getReference("Users");
+                                reference.child(userId).setValue(user)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                Toast.makeText(KaydolActivity.this, "User created successfully.", Toast.LENGTH_LONG).show();
+                                                Intent intent = new Intent(KaydolActivity.this, GirisActivity.class);
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(KaydolActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                            } else {
+                                // Kullanıcı oluşturma başarısız olursa
+                                Toast.makeText(KaydolActivity.this, Objects.requireNonNull(task.getException()).getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
         }
 
     }
