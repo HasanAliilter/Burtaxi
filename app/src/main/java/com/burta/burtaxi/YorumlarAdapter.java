@@ -66,7 +66,6 @@ public class YorumlarAdapter extends RecyclerView.Adapter<YorumlarAdapter.CardVi
             textView_YorumlarIsim = itemView.findViewById(R.id.textView_YorumlarIsim);
             textView_YorumlarOrtalama = itemView.findViewById(R.id.textView_YorumlarOrtalama);
             textView_YorumlarPlaka = itemView.findViewById(R.id.textView_YorumlarPlaka);
-            textView_YorumlarYorum = itemView.findViewById(R.id.textView_YorumlarYorum);
         }
     }
 }
