@@ -21,10 +21,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class FragmentDorduncu extends Fragment {
-    private Toolbar toolbar_fragmentDort;
-    private RecyclerView rv_fragmentDort;
-
+public class Fragmentbesinci extends Fragment {
+    private Toolbar toolbar_fragmentBes;
+    private RecyclerView rv_fragmentBes;
     private ArrayList<Calisanlar> calisanlarArrayList;
     private CalisanlarAdapterCagir adapter;
 
@@ -33,16 +32,15 @@ public class FragmentDorduncu extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_dorduncu, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_besinci, container, false);
 
-        toolbar_fragmentDort = rootView.findViewById(R.id.toolbar_seyahatler);
-        rv_fragmentDort = rootView.findViewById(R.id.rv_seyahatler);
+        toolbar_fragmentBes = rootView.findViewById(R.id.toolbar_fragmentBes);
+        rv_fragmentBes = rootView.findViewById(R.id.rv_fragmentBes);
 
-        toolbar_fragmentDort.setTitle("Seyahat Listesi");
-        toolbar_fragmentDort.setTitleTextColor(Color.BLACK);
+        toolbar_fragmentBes.setTitle("Burtaxi Şoförleri");
+        toolbar_fragmentBes.setTitleTextColor(Color.BLACK);
 
-        rv_fragmentDort.setHasFixedSize(true);
-        rv_fragmentDort.setLayoutManager(new LinearLayoutManager(getContext()));
+        rv_fragmentBes.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
 
         calisanlarArrayList = new ArrayList<>();
         adapter = new CalisanlarAdapterCagir(rootView.getContext(), calisanlarArrayList);
@@ -68,9 +66,8 @@ public class FragmentDorduncu extends Fragment {
             }
         });
 
-        rv_fragmentDort.setAdapter(adapter);
+        rv_fragmentBes.setAdapter(adapter);
 
         return rootView;
-
     }
 }
