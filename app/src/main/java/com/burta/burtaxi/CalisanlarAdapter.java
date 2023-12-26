@@ -63,14 +63,14 @@ public class CalisanlarAdapter extends RecyclerView.Adapter<CalisanlarAdapter.Ca
             }
         });
 
-        /*holder.buttonYorumYap.setOnClickListener(new View.OnClickListener() {
+        holder.buttonYorumYap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, YorumActivity.class);
                 intent.putExtra("calisanlar", calisanlar);
                 mContext.startActivity(intent);
             }
-        });*/
+        });
 
 
     }

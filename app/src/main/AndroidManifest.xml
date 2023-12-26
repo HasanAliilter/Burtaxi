@@ -20,6 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.Burtaxi"
         tools:targetApi="31">
+        <activity android:name=".YorumActivity"></activity>
         <activity android:name=".OylamaActivity" />
         <activity
             android:name=".IlkEkranActivity"
