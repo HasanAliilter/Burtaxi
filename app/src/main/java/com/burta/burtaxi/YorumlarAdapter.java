@@ -39,7 +39,6 @@ public class YorumlarAdapter extends RecyclerView.Adapter<YorumlarAdapter.CardVi
         holder.textView_YorumlarIsim.setText("Sürücü İsmi : " + yorumlar.getYorumlar_yorumYapan());
         holder.textView_YorumlarOrtalama.setText("Ortalama : " + yorumlar.getYorumlar_calisan_ortalama());
         holder.textView_YorumlarPlaka.setText("Araç Plakası : " + yorumlar.getYorumlar_yorumPlaka());
-        holder.textView_YorumlarYorum.setText(yorumlar.getYorumlar_icerik());
         holder.cardViewYorumlar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
