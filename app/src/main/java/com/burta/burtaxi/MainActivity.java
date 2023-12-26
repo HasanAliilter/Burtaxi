@@ -36,11 +36,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public FirebaseAuth auth;
 
 
-
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +103,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         if (item.getItemId() == R.id.nav_dorduncu) {
             tempFragment = new FragmentDorduncu();
+        }
+        if (item.getItemId() == R.id.nav_besinci) {
+            tempFragment = new Fragmentbesinci();
         }
         if (item.getItemId() == R.id.nav_logout) {
             auth.signOut();
