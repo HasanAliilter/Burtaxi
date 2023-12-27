@@ -39,7 +39,6 @@ public class YorumlarAdapter extends RecyclerView.Adapter<YorumlarAdapter.CardVi
         holder.textView_YorumlarIsim.setText("Sürücü İsmi : " + yorumlar.getYorumlar_yorumYapan());
         holder.textView_YorumlarOrtalama.setText("Ortalama : " + yorumlar.getYorumlar_calisan_ortalama());
         holder.textView_YorumlarPlaka.setText("Araç Plakası : " + yorumlar.getYorumlar_yorumPlaka());
-        holder.textView_YorumlarYorum.setText(yorumlar.getYorumlar_icerik());
         holder.cardViewYorumlar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,7 +66,6 @@ public class YorumlarAdapter extends RecyclerView.Adapter<YorumlarAdapter.CardVi
             textView_YorumlarIsim = itemView.findViewById(R.id.textView_YorumlarIsim);
             textView_YorumlarOrtalama = itemView.findViewById(R.id.textView_YorumlarOrtalama);
             textView_YorumlarPlaka = itemView.findViewById(R.id.textView_YorumlarPlaka);
-            textView_YorumlarYorum = itemView.findViewById(R.id.textView_YorumlarYorum);
         }
     }
 }
