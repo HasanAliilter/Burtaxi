@@ -7,13 +7,11 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-<<<<<<< HEAD
 
-=======
     <meta-data
         android:name="com.google.android.geo.API_KEY"
-        android:value="" />
->>>>>>> 3474ee2a8d692931be06ecd5c6d74691a82c48b2
+        android:value="AIzaSyCyVmHpC7F-TKnWYGlbbNKbBL5QOPNJWD8" />
+
 
     <application
         android:allowBackup="true"

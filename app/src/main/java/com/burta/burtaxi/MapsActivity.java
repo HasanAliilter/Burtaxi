@@ -6,6 +6,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SearchView;
@@ -24,9 +25,21 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
     private final int FINE_PERMISSION_CODE = 1;
@@ -36,16 +49,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private SearchView mapSearchView;
     private TextView current_location;
     private TextView next_location;
-
-
-
+    private String currLocation;
+    private String nextLocation;
+    private FirebaseDatabase database;
+    private Calisanlar calisanlar;
     private Button Ekle;
+    UUID uuid = UUID.randomUUID();
+    DatabaseReference reference;
+
+    FirebaseAuth auth ;
+    FirebaseUser user ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        calisanlar = (Calisanlar) getIntent().getSerializableExtra("calisanlar");
+
+
+        database = FirebaseDatabase.getInstance();
+
+
+        auth = FirebaseAuth.getInstance();
+         user = auth.getCurrentUser();
 
 
         current_location = findViewById(R.id.current_location);
@@ -105,6 +133,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if (addressList != null && addressList.size() > 0) {
                     String il = addressList.get(0).getAdminArea(); // İl bilgisini alır
                     String ilce = addressList.get(0).getSubAdminArea(); // İlçe bilgisini alır
+                    String konum=il+" "+ilce;
+                    currLocation=konum;
                     current_location.setText(il + ", " + ilce); // İl ve ilçeyi TextView'e yazar
 
                 }
@@ -118,18 +148,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         String searchedLocation = mapSearchView.getQuery().toString().trim();
             if (!searchedLocation.isEmpty()) {
+                nextLocation=searchedLocation;
                 next_location.setText(searchedLocation);
+
             } else {
                 next_location.setText("Next Location: Not Found");
             }
 
         if (current_location != null && next_location!=null ) {
-
-
-                    Intent intent =new Intent(MapsActivity.this,burtaxi_splash_screen.class);
-                    startActivity(intent);
-
-
+                    konum_ekle();
             Toast.makeText(MapsActivity.this, "Burtaxi Yola Çıktı!", Toast.LENGTH_SHORT).show();
         } else {
 
@@ -175,5 +202,48 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Toast.makeText(this, "Location permission is denied, please allow the permission", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+
+    public void konum_ekle() {
+
+
+        String seyahat_id = user.getUid();
+
+        String seyahatler_id=uuid.toString();
+
+        String tarih = getDateTime();
+        String sofor_isim = calisanlar.getCalisan_isim();
+
+        Konum konum = new Konum(tarih, currLocation, nextLocation, sofor_isim, seyahat_id);
+
+        Log.v("TAg",sofor_isim+" "+currLocation);
+        if (database != null) {
+            reference = database.getReference("Seyahatlerim");
+            reference.child(seyahat_id).child(seyahatler_id).setValue(konum)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Toast.makeText(MapsActivity.this, "Rotate created successfully.", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(MapsActivity.this, burtaxi_splash_screen.class);
+                            startActivity(intent);
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(MapsActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+        } else {
+            // Eğer database null ise, burada bir işlem yapılabilir.
+            Toast.makeText(MapsActivity.this, "Database instance is null", Toast.LENGTH_LONG).show();
+        }
+    }
+    private String getDateTime() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        return dateFormat.format(calendar.getTime());
     }
 }
