@@ -42,7 +42,9 @@ public class YorumlarAdapter extends RecyclerView.Adapter<YorumlarAdapter.CardVi
         holder.cardViewYorumlar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(mContext, YorumListesiActivity.class);
+                intent.putExtra("yorumlar", yorumlar);
+                mContext.startActivity(intent);
             }
         });
 
