@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,15 +27,22 @@ public class FragmentDorduncu extends Fragment {
     private Toolbar toolbar_fragmentDort;
     private RecyclerView rv_fragmentDort;
 
-    private ArrayList<Calisanlar> calisanlarArrayList;
-    private CalisanlarAdapterCagir adapter;
+    private ArrayList<Konum> KonumArrayList;
+    private SeyahatlerimAdapter adapter;
 
-    private DatabaseReference calisanlarRef;
+    private DatabaseReference SehayatRef;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_dorduncu, container, false);
+
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+
+        String kullanıcı_id = user.getUid();
+
 
         toolbar_fragmentDort = rootView.findViewById(R.id.toolbar_seyahatler);
         rv_fragmentDort = rootView.findViewById(R.id.rv_seyahatler);
@@ -44,19 +53,19 @@ public class FragmentDorduncu extends Fragment {
         rv_fragmentDort.setHasFixedSize(true);
         rv_fragmentDort.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        calisanlarArrayList = new ArrayList<>();
-        adapter = new CalisanlarAdapterCagir(rootView.getContext(), calisanlarArrayList);
+        KonumArrayList = new ArrayList<>();
+        adapter = new SeyahatlerimAdapter(rootView.getContext(), KonumArrayList);
 
-        calisanlarRef = FirebaseDatabase.getInstance().getReference().child("Calisanlar");
+        SehayatRef = FirebaseDatabase.getInstance().getReference().child("Seyahatlerim").child(kullanıcı_id);
 
-        calisanlarRef.addValueEventListener(new ValueEventListener() {
+        SehayatRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                calisanlarArrayList.clear();
+                KonumArrayList.clear();
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Calisanlar calisanlar = snapshot.getValue(Calisanlar.class);
-                    calisanlarArrayList.add(calisanlar);
+                    Konum konum = snapshot.getValue(Konum.class);
+                    KonumArrayList.add(konum);
                 }
 
                 adapter.notifyDataSetChanged();

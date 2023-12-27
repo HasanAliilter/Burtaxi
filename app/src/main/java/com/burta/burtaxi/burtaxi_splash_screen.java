@@ -22,7 +22,7 @@ public class burtaxi_splash_screen extends AppCompatActivity {
         timer.schedule(new TimerTask(){
             @Override
             public void run(){
-                Intent intent =new Intent(burtaxi_splash_screen.this,FragmentDorduncu.class);
+                Intent intent =new Intent(burtaxi_splash_screen.this,MainActivity.class);
                 startActivity(intent);
             }
         },5000);
