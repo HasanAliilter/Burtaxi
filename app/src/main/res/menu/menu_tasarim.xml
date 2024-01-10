@@ -12,7 +12,7 @@
                 android:title="Şoför Yorumları"></item>
             <item
                 android:id="@+id/nav_besinci"
-                android:icon="@drawable/baseline_card_travel_24"
+                android:icon="@drawable/baseline_directions_car_24"
                 android:title="Burtaxi Çagır"></item>
             <item
                 android:id="@+id/nav_dorduncu"
@@ -22,12 +22,8 @@
         </menu>
     </item>
 
-    <item android:title="Durak Bölümü">
+    <item android:title="Çıkış">
         <menu>
-            <item
-                android:id="@+id/nav_ucuncu"
-                android:icon="@drawable/ic_baseline_directions_car_24"
-                android:title="Duraklar"></item>
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_baseline_exit_to_app_24"

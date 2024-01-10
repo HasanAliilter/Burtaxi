@@ -224,7 +224,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(MapsActivity.this, "Rotate created successfully.", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(MapsActivity.this, burtaxi_splash_screen.class);
                             startActivity(intent);
 

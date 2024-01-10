@@ -98,9 +98,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (item.getItemId() == R.id.nav_ikinci) {
             tempFragment = new FragmentIkinci();
         }
-        if (item.getItemId() == R.id.nav_ucuncu) {
-            tempFragment = new FragmentUcuncu();
-        }
         if (item.getItemId() == R.id.nav_dorduncu) {
             tempFragment = new FragmentDorduncu();
         }
