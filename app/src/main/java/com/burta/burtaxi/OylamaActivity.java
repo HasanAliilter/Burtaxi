@@ -7,7 +7,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Locale;
@@ -55,55 +55,59 @@ public class OylamaActivity extends AppCompatActivity {
         buttonKaydetKisi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ratingBarKisi.getRating() != 0) {
-                    oylamaSonucu(calisanlar.getCalisan_id(), ratingBarKisi.getRating());
+                    OylamaSonucu(calisanlar, ratingBarKisi.getRating());
                     startActivity(new Intent(OylamaActivity.this,MainActivity.class));
                     finish();
-                    // Diğer işlemleri ekleyebilirsiniz.
-                } else {
-                    Toast.makeText(getApplicationContext(), "Lütfen Oyunuzu Giriniz !", Toast.LENGTH_LONG).show();
-                }
             }
         });
     }
 
-    private void oylamaSonucu(int calisanId, final double yeniOy) {
-        // DatabaseReference calisanlarRef = FirebaseDatabase.getInstance().getReference().child("calisanlar");
-        DatabaseReference calisanRef = FirebaseDatabase.getInstance().getReference().child("calisanlar").child(String.valueOf(calisanId));
+    public void OylamaSonucu(Calisanlar calisan, double calisan_rating) {
+        int calisan_id = calisan.getCalisan_id();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Calisanlar");
 
-        calisanRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        Query query = databaseReference.orderByChild("calisan_id").equalTo(calisan_id);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    // Veri bulunduğunda yapılacak işlemler
-                    Calisanlar calisan = dataSnapshot.getValue(Calisanlar.class);
-                    if (calisan != null) {
-                        double oy = calisan.getCalisan_rating();
-                        int toplamOy = calisan.getCalisan_toplamOy();
+                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                        Double oy = calisan.getCalisan_rating();
+                        Integer toplamOy = calisan.getCalisan_toplamOy();
 
-                        if (toplamOy == 0) {
-                            toplamOy = 2;
+                        if (oy != null && toplamOy != null) {
+                            if (toplamOy == 0) {
+                                toplamOy = 2;
+                            }
+
+                            final int finalToplamOy = toplamOy;
+
+                            double sonuc = ((calisan_rating + (oy * (finalToplamOy - 1))) / finalToplamOy);
+                            sonuc = Double.parseDouble(String.format(Locale.US, "%.2f", sonuc));
+
+                            Log.e("dalga1", "Yeni Rating: " + sonuc);
+                            Log.e("dalga1", "Yeni ToplamOy: " + (finalToplamOy + 1));
+
+                            // Güncellenmiş değerleri Firebase Realtime Database'e yaz
+                            childSnapshot.child("calisan_rating").getRef().setValue(sonuc);
+                            childSnapshot.child("calisan_toplamOy").getRef().setValue(finalToplamOy + 1);
+                        } else {
+                            // Değerler null ise, hata durumunu ele alabilirsin
+                            Log.e("dalga1", "oy veya toplamOy null");
                         }
-
-                        double sonuc = ((yeniOy + (oy * (toplamOy - 1))) / toplamOy);
-                        sonuc = Double.parseDouble(String.format(Locale.US, "%.2f", sonuc));
-
-                        // Yeni değerleri güncelle
-                        dataSnapshot.getRef().child("calisan_rating").setValue(sonuc);
-                        dataSnapshot.getRef().child("calisan_toplamOy").setValue(toplamOy + 1);
                     }
                 } else {
-                    // Veri bulunamadığında yapılacak işlemler
-                    Log.e("Firebase", "Belirtilen calisan_id'ye sahip veri bulunamadı.");
+                    Log.e("dalga1", "DataSnapshot boş");
                 }
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Hata durumu
-                Log.e("Firebase", "Veritabanı hatası: " + databaseError.getMessage());
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("dalga1", "Veritabanı Hatası: " + databaseError.getMessage());
             }
         });
     }
+
 
 }
